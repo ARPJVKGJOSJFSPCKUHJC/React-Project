@@ -1,13 +1,18 @@
 import React, { useContext } from "react";
-import { Link } from "react-router";
+// Import Link from react-router-dom
+import { Link } from "react-router-dom";
 
 import { IoMdAdd, IoMdClose, IoMdRemove } from "react-icons/io";
 
 import { CartContext } from "../contexts/CartContext.jsx";
+// Import CurrencyContext
+import { CurrencyContext } from "../contexts/CurrencyContext.jsx";
 
 const CartItem = ({ item }) => {
 	const { removeFromCart, increaseAmount, decreaseAmount } =
 		useContext(CartContext);
+	// Get currencySymbol from CurrencyContext
+	const { currencySymbol } = useContext(CurrencyContext);
 	// destructure item
 	const { id, title, image, price, amount } = item;
 
@@ -57,10 +62,12 @@ const CartItem = ({ item }) => {
 						</div>
 						{/* item price */}
 						<div className="flex flex-1 justify-around items-center">
-							$ {price}
+							{/* Use currencySymbol */}
+							{currencySymbol} {price}
 						</div>
 						{/* final price */}
-						<div className="flex flex-1 justify-end items-center text-primary font-medium">{`$ ${parseFloat(
+						{/* Use currencySymbol */}
+						<div className="flex flex-1 justify-end items-center text-primary font-medium">{`${currencySymbol} ${parseFloat(
 							price * amount
 						).toFixed(2)}`}</div>
 					</div>

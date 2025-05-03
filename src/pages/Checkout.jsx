@@ -1,7 +1,8 @@
 import React, { useContext, useState } from "react";
 import { CartContext } from "../contexts/CartContext.jsx";
 import { CurrencyContext } from "../contexts/CurrencyContext.jsx";
-import { Link } from "react-router";
+// Import Link from react-router-dom
+import { Link } from "react-router-dom";
 
 const Checkout = () => {
 	const { cart, total, clearCart } = useContext(CartContext);
@@ -20,6 +21,15 @@ const Checkout = () => {
 		expDate: "",
 		cvv: "",
 	});
+
+	// Add handleChange function
+	const handleChange = (e) => {
+		const { name, value } = e.target;
+		setFormData((prevData) => ({
+			...prevData,
+			[name]: value,
+		}));
+	};
 
 	const handleCheckout = (e) => {
 		e.preventDefault();
@@ -178,6 +188,8 @@ const Checkout = () => {
 													id="fullName"
 													name="fullName"
 													value={formData.fullName}
+													// Add onChange handler
+													onChange={handleChange}
 													className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none"
 													required
 												/>
@@ -194,6 +206,8 @@ const Checkout = () => {
 													id="email"
 													name="email"
 													value={formData.email}
+													// Add onChange handler
+													onChange={handleChange}
 													className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none"
 													required
 												/>
@@ -218,6 +232,8 @@ const Checkout = () => {
 													id="address"
 													name="address"
 													value={formData.address}
+													// Add onChange handler
+													onChange={handleChange}
 													className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none"
 													required
 												/>
@@ -236,6 +252,8 @@ const Checkout = () => {
 														id="city"
 														name="city"
 														value={formData.city}
+														// Add onChange handler
+														onChange={handleChange}
 														className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none"
 														required
 													/>
@@ -252,6 +270,8 @@ const Checkout = () => {
 														id="postalCode"
 														name="postalCode"
 														value={formData.postalCode}
+														// Add onChange handler
+														onChange={handleChange}
 														className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none"
 														required
 													/>
@@ -268,6 +288,8 @@ const Checkout = () => {
 														id="country"
 														name="country"
 														value={formData.country}
+														// Add onChange handler
+														onChange={handleChange}
 														className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none"
 														required
 													/>
@@ -291,6 +313,8 @@ const Checkout = () => {
 													id="cardNumber"
 													name="cardNumber"
 													value={formData.cardNumber}
+													// Add onChange handler
+													onChange={handleChange}
 													placeholder="1234 5678 9012 3456"
 													className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none"
 													required
@@ -309,6 +333,8 @@ const Checkout = () => {
 													id="cardName"
 													name="cardName"
 													value={formData.cardName}
+													// Add onChange handler
+													onChange={handleChange}
 													className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none"
 													required
 												/>
@@ -327,6 +353,8 @@ const Checkout = () => {
 														id="expDate"
 														name="expDate"
 														value={formData.expDate}
+														// Add onChange handler
+														onChange={handleChange}
 														placeholder="MM/YY"
 														className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none"
 														required
@@ -344,6 +372,8 @@ const Checkout = () => {
 														id="cvv"
 														name="cvv"
 														value={formData.cvv}
+														// Add onChange handler
+														onChange={handleChange}
 														placeholder="123"
 														className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none"
 														required

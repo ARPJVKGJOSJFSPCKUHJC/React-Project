@@ -1,12 +1,17 @@
 import React, { useContext } from "react";
-import { Link } from "react-router";
+// Import Link from react-router-dom
+import { Link } from "react-router-dom";
 
 import { BsPlus, BsEyeFill } from "react-icons/bs";
 
 import { CartContext } from "../contexts/CartContext.jsx";
+// Import CurrencyContext
+import { CurrencyContext } from "../contexts/CurrencyContext.jsx";
 
 const Product = ({ product }) => {
 	const { addToCart } = useContext(CartContext);
+	// Get currencySymbol from CurrencyContext
+	const { currencySymbol } = useContext(CurrencyContext);
 	const { id, image, category, title, price } = product;
 
 	return (
@@ -44,7 +49,8 @@ const Product = ({ product }) => {
 					<h2 className="font-semibold mb-1">{title}</h2>
 				</Link>
 
-				<h2 className="font-semibbold">$ {price}</h2>
+				{/* Use currencySymbol */}
+				<h2 className="font-semibbold">{currencySymbol} {price}</h2>
 			</div>
 		</div>
 	);
