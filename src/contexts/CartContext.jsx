@@ -1,4 +1,6 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react"; // Import useContext
+// Import CurrencyContext
+import { CurrencyContext } from "./CurrencyContext";
 
 export const CartContext = createContext();
 
@@ -9,14 +11,18 @@ const CartProvider = ({ children }) => {
 	const [itemAmount, setItemAmount] = useState(0);
 	// total price state
 	const [total, setTotal] = useState(0);
+	// Get currency context
+	const { currency, EXCHANGE_RATES } = useContext(CurrencyContext);
 
 	useEffect(() => {
+		const currentRate = EXCHANGE_RATES[currency];
 		const total = cart.reduce((accumulator, currentItem) => {
-			// Calculate total based on price * amount
-			return accumulator + currentItem.price * currentItem.amount;
+			// Calculate total based on price * amount * exchange rate
+			return accumulator + currentItem.price * currentItem.amount * currentRate;
 		}, 0);
 		setTotal(total);
-	}, [cart]);
+		// Add currency and EXCHANGE_RATES as dependencies
+	}, [cart, currency, EXCHANGE_RATES]);
 
 	// update item amount
 	useEffect(() => {

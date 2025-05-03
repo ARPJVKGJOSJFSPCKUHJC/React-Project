@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import { ProductContext } from "../contexts/ProductContext.jsx";
 // Import CartContext to add items
 import { CartContext } from "../contexts/CartContext.jsx";
+// Import CurrencyContext
+import { CurrencyContext } from "../contexts/CurrencyContext.jsx";
 
 const ProductDetails = () => {
 	// get the product id from url
@@ -11,6 +13,9 @@ const ProductDetails = () => {
 	const { products } = useContext(ProductContext);
 	// Add addToCart from CartContext
 	const { addToCart } = useContext(CartContext);
+	// Get currency context values
+	const { currency, currencySymbol, EXCHANGE_RATES } =
+		useContext(CurrencyContext);
 
 	//get the single product based on id
 	// Find product by id, converting URL param id to number
@@ -29,6 +34,10 @@ const ProductDetails = () => {
 
 	// destructure product
 	const { title, price, description, image } = product;
+
+	// Calculate converted price
+	const convertedPrice = (price * EXCHANGE_RATES[currency]).toFixed(2);
+
 	return (
 		<section
 			className="pt-[450px] md:pt-32 pb-[400px] md:pb-12 lg:py-32 h-screen flex items-center"
@@ -47,7 +56,8 @@ const ProductDetails = () => {
 							{title}
 						</h1>
 						<div className="text-2xl text-red-500 font-medium mb-6">
-							$ {price}
+							{/* Display converted price */}
+							{currencySymbol} {convertedPrice}
 						</div>
 						<p className="mb-8">{description}</p>
 						{/* Add onClick handler to call addToCart */}

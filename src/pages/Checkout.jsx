@@ -5,8 +5,11 @@ import { CurrencyContext } from "../contexts/CurrencyContext.jsx";
 import { Link } from "react-router-dom";
 
 const Checkout = () => {
+	// Get total from CartContext (already converted)
 	const { cart, total, clearCart } = useContext(CartContext);
-	const { currencySymbol } = useContext(CurrencyContext);
+	// Get currency context values
+	const { currency, currencySymbol, EXCHANGE_RATES } =
+		useContext(CurrencyContext);
 
 	const [loading, setLoading] = useState(false);
 	const [formData, setFormData] = useState({
@@ -43,10 +46,12 @@ const Checkout = () => {
 		}, 1500);
 	};
 
-	// Calculate subtotal, shipping and taxes
-	const subtotal = total;
-	const shipping = cart.length > 0 ? 10.0 : 0;
-	const tax = subtotal * 0.08;
+	// Calculate subtotal, shipping and taxes in selected currency
+	const subtotal = total; // Already converted in CartContext
+	const baseShipping = cart.length > 0 ? 10.0 : 0; // Base shipping in USD
+	const currentRate = EXCHANGE_RATES[currency];
+	const shipping = baseShipping * currentRate;
+	const tax = subtotal * 0.08; // Tax calculated on the already converted subtotal
 	const grandTotal = subtotal + shipping + tax;
 
 	return (
@@ -123,7 +128,12 @@ const Checkout = () => {
 											<div className="text-right">
 												<p className="text-sm font-medium text-gray-900">
 													{currencySymbol}
-													{(item.price * item.amount).toFixed(2)}
+													{/* Convert item total price */}
+													{(
+														item.price *
+														item.amount *
+														currentRate
+													).toFixed(2)}
 												</p>
 											</div>
 										</div>
@@ -135,6 +145,7 @@ const Checkout = () => {
 										<span className="text-gray-600">Subtotal</span>
 										<span className="font-medium">
 											{currencySymbol}
+											{/* Display converted subtotal */}
 											{subtotal.toFixed(2)}
 										</span>
 									</div>
@@ -142,6 +153,7 @@ const Checkout = () => {
 										<span className="text-gray-600">Shipping</span>
 										<span className="font-medium">
 											{currencySymbol}
+											{/* Display converted shipping */}
 											{shipping.toFixed(2)}
 										</span>
 									</div>
@@ -149,6 +161,7 @@ const Checkout = () => {
 										<span className="text-gray-600">Tax (8%)</span>
 										<span className="font-medium">
 											{currencySymbol}
+											{/* Display calculated tax */}
 											{tax.toFixed(2)}
 										</span>
 									</div>
@@ -156,6 +169,7 @@ const Checkout = () => {
 										<span className="font-semibold">Total</span>
 										<span className="font-bold">
 											{currencySymbol}
+											{/* Display calculated grand total */}
 											{grandTotal.toFixed(2)}
 										</span>
 									</div>
@@ -416,6 +430,7 @@ const Checkout = () => {
 													Processing...
 												</span>
 											) : (
+												/* Display converted grand total in button */
 												`Place Order • ${currencySymbol}${grandTotal.toFixed(
 													2
 												)}`

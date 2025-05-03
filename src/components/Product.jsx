@@ -10,9 +10,13 @@ import { CurrencyContext } from "../contexts/CurrencyContext.jsx";
 
 const Product = ({ product }) => {
 	const { addToCart } = useContext(CartContext);
-	// Get currencySymbol from CurrencyContext
-	const { currencySymbol } = useContext(CurrencyContext);
+	// Get currencySymbol, currency, and EXCHANGE_RATES from CurrencyContext
+	const { currencySymbol, currency, EXCHANGE_RATES } =
+		useContext(CurrencyContext);
 	const { id, image, category, title, price } = product;
+
+	// Calculate converted price
+	const convertedPrice = (price * EXCHANGE_RATES[currency]).toFixed(2);
 
 	return (
 		<div>
@@ -49,8 +53,10 @@ const Product = ({ product }) => {
 					<h2 className="font-semibold mb-1">{title}</h2>
 				</Link>
 
-				{/* Use currencySymbol */}
-				<h2 className="font-semibbold">{currencySymbol} {price}</h2>
+				{/* Use currencySymbol and convertedPrice */}
+				<h2 className="font-semibbold">
+					{currencySymbol} {convertedPrice}
+				</h2>
 			</div>
 		</div>
 	);

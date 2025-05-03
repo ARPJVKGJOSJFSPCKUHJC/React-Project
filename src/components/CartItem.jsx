@@ -11,10 +11,19 @@ import { CurrencyContext } from "../contexts/CurrencyContext.jsx";
 const CartItem = ({ item }) => {
 	const { removeFromCart, increaseAmount, decreaseAmount } =
 		useContext(CartContext);
-	// Get currencySymbol from CurrencyContext
-	const { currencySymbol } = useContext(CurrencyContext);
+	// Get currencySymbol, currency, and EXCHANGE_RATES from CurrencyContext
+	const { currencySymbol, currency, EXCHANGE_RATES } =
+		useContext(CurrencyContext);
 	// destructure item
 	const { id, title, image, price, amount } = item;
+
+	// Calculate converted prices
+	const convertedPrice = (price * EXCHANGE_RATES[currency]).toFixed(2);
+	const convertedFinalPrice = (
+		price *
+		amount *
+		EXCHANGE_RATES[currency]
+	).toFixed(2);
 
 	return (
 		<div className="flex gap-x-4 py-2 lg:px-6 border-b border-gray-200 w-full font-light text-gray-500">
@@ -62,14 +71,12 @@ const CartItem = ({ item }) => {
 						</div>
 						{/* item price */}
 						<div className="flex flex-1 justify-around items-center">
-							{/* Use currencySymbol */}
-							{currencySymbol} {price}
+							{/* Use currencySymbol and convertedPrice */}
+							{currencySymbol} {convertedPrice}
 						</div>
 						{/* final price */}
-						{/* Use currencySymbol */}
-						<div className="flex flex-1 justify-end items-center text-primary font-medium">{`${currencySymbol} ${parseFloat(
-							price * amount
-						).toFixed(2)}`}</div>
+						{/* Use currencySymbol and convertedFinalPrice */}
+						<div className="flex flex-1 justify-end items-center text-primary font-medium">{`${currencySymbol} ${convertedFinalPrice}`}</div>
 					</div>
 				</div>
 			</div>

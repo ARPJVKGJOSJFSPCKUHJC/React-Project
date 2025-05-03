@@ -33,7 +33,9 @@ const CurrencyProvider = ({ children }) => {
 	}, [currency]);
 
 	return (
-		<CurrencyContext.Provider value={{ currency, setCurrency, currencySymbol }}>
+		<CurrencyContext.Provider
+			value={{ currency, setCurrency, currencySymbol, EXCHANGE_RATES }}
+		>
 			{children}
 		</CurrencyContext.Provider>
 	);
