@@ -64,8 +64,14 @@ const CartProvider = ({ children }) => {
 
 	// increase amount
 	const increaseAmount = (id) => {
-		const cartItem = cart.find((item) => item.id === id);
-		addToCart(cartItem, id);
+		// Find the item and increment its amount directly
+		const newCart = cart.map((item) => {
+			if (item.id === id) {
+				return { ...item, amount: item.amount + 1 };
+			}
+			return item;
+		});
+		setCart(newCart);
 	};
 
 	// decrease amount
