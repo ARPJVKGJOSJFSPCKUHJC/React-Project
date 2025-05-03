@@ -1,13 +1,22 @@
 import React, { useContext } from "react";
-import { Link } from "react-router";
+// Import Link from react-router-dom
+import { Link } from "react-router-dom";
 
 import { BsPlus, BsEyeFill } from "react-icons/bs";
 
 import { CartContext } from "../contexts/CartContext.jsx";
+// Import CurrencyContext
+import { CurrencyContext } from "../contexts/CurrencyContext.jsx";
 
 const Product = ({ product }) => {
 	const { addToCart } = useContext(CartContext);
+	// Get currencySymbol, currency, and EXCHANGE_RATES from CurrencyContext
+	const { currencySymbol, currency, EXCHANGE_RATES } =
+		useContext(CurrencyContext);
 	const { id, image, category, title, price } = product;
+
+	// Calculate converted price
+	const convertedPrice = (price * EXCHANGE_RATES[currency]).toFixed(2);
 
 	return (
 		<div>
@@ -44,7 +53,10 @@ const Product = ({ product }) => {
 					<h2 className="font-semibold mb-1">{title}</h2>
 				</Link>
 
-				<h2 className="font-semibbold">$ {price}</h2>
+				{/* Use currencySymbol and convertedPrice */}
+				<h2 className="font-semibbold">
+					{currencySymbol} {convertedPrice}
+				</h2>
 			</div>
 		</div>
 	);

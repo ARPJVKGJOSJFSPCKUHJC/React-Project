@@ -1,14 +1,27 @@
 import React, { useContext } from "react";
-import { useParams } from "react-router";
+// Import Link from react-router-dom
+import { useParams } from "react-router-dom";
 import { ProductContext } from "../contexts/ProductContext.jsx";
+// Import CartContext to add items
+import { CartContext } from "../contexts/CartContext.jsx";
+// Import CurrencyContext
+import { CurrencyContext } from "../contexts/CurrencyContext.jsx";
 
 const ProductDetails = () => {
 	// get the product id from url
 	const { id } = useParams();
 	const { products } = useContext(ProductContext);
+	// Add addToCart from CartContext
+	const { addToCart } = useContext(CartContext);
+	// Get currency context values
+	const { currency, currencySymbol, EXCHANGE_RATES } =
+		useContext(CurrencyContext);
 
 	//get the single product based on id
-	const product = products[id];
+	// Find product by id, converting URL param id to number
+	const product = products.find((item) => {
+		return item.id === parseInt(id);
+	});
 
 	// if product is not found
 	if (!product) {
@@ -21,6 +34,10 @@ const ProductDetails = () => {
 
 	// destructure product
 	const { title, price, description, image } = product;
+
+	// Calculate converted price
+	const convertedPrice = (price * EXCHANGE_RATES[currency]).toFixed(2);
+
 	return (
 		<section
 			className="pt-[450px] md:pt-32 pb-[400px] md:pb-12 lg:py-32 h-screen flex items-center"
@@ -39,10 +56,15 @@ const ProductDetails = () => {
 							{title}
 						</h1>
 						<div className="text-2xl text-red-500 font-medium mb-6">
-							$ {price}
+							{/* Display converted price */}
+							{currencySymbol} {convertedPrice}
 						</div>
 						<p className="mb-8">{description}</p>
-						<button className="bg-black py-4 px-8 text-white">
+						{/* Add onClick handler to call addToCart */}
+						<button
+							onClick={() => addToCart(product, product.id)}
+							className="bg-black py-4 px-8 text-white"
+						>
 							Add to cart
 						</button>
 					</div>

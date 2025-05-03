@@ -1,4 +1,6 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react"; // Import useContext
+// Import CurrencyContext
+import { CurrencyContext } from "./CurrencyContext";
 
 export const CartContext = createContext();
 
@@ -9,13 +11,18 @@ const CartProvider = ({ children }) => {
 	const [itemAmount, setItemAmount] = useState(0);
 	// total price state
 	const [total, setTotal] = useState(0);
+	// Get currency context
+	const { currency, EXCHANGE_RATES } = useContext(CurrencyContext);
 
 	useEffect(() => {
+		const currentRate = EXCHANGE_RATES[currency];
 		const total = cart.reduce((accumulator, currentItem) => {
-			return accumulator + currentItem.price;
+			// Calculate total based on price * amount * exchange rate
+			return accumulator + currentItem.price * currentItem.amount * currentRate;
 		}, 0);
 		setTotal(total);
-	}, [cart]);
+		// Add currency and EXCHANGE_RATES as dependencies
+	}, [cart, currency, EXCHANGE_RATES]);
 
 	// update item amount
 	useEffect(() => {
@@ -29,7 +36,8 @@ const CartProvider = ({ children }) => {
 
 	// add to cart
 	const addToCart = (product, id) => {
-		const newItem = { ...product, amount: 2 };
+		// Set initial amount to 1
+		const newItem = { ...product, amount: 1 };
 		// check if the item is already in the cart
 		const cartItem = cart.find((item) => {
 			return item.id === id;
@@ -37,7 +45,8 @@ const CartProvider = ({ children }) => {
 		if (cartItem) {
 			const newCart = [...cart].map((item) => {
 				if (item.id === id) {
-					return { ...item, amount: cartItem.amount };
+					// Increment amount correctly
+					return { ...item, amount: cartItem.amount + 1 };
 				} else return item;
 			});
 			setCart(newCart);
@@ -61,13 +70,31 @@ const CartProvider = ({ children }) => {
 
 	// increase amount
 	const increaseAmount = (id) => {
-		const cartItem = cart.find((item) => item.id === id);
-		addToCart(cartItem, id);
+		// Find the item and increment its amount directly
+		const newCart = cart.map((item) => {
+			if (item.id === id) {
+				return { ...item, amount: item.amount + 1 };
+			}
+			return item;
+		});
+		setCart(newCart);
 	};
 
 	// decrease amount
 	const decreaseAmount = (id) => {
 		const cartItem = cart.find((item) => item.id === id);
+		if (cartItem) {
+			const newCart = cart.map((item) => {
+				if (item.id === id) {
+					return { ...item, amount: cartItem.amount - 1 };
+				} else {
+					return item;
+				}
+			});
+			// Filter out items with amount 0
+			const filteredCart = newCart.filter((item) => item.amount > 0);
+			setCart(filteredCart);
+		}
 	};
 
 	return (

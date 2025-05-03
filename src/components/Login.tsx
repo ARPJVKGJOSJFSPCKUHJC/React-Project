@@ -1,6 +1,8 @@
 // src/components/Login.js
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import * as React from "react";
+import { useState } from "react";
+// Import Link and useNavigate from react-router-dom
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 export default function Login() {

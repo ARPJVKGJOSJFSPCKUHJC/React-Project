@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router";
+import * as React from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 export default function Profile() {
